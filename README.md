@@ -1,0 +1,1 @@
+# mobile_app_training_blog
