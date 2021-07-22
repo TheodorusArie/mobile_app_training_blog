@@ -1,36 +1,83 @@
 import React, { useContext } from 'react';
-import { View, Text, StyleSheet, Button, FlatList } from 'react-native';
-// import { Context } from '../contexts/BlogContext'
-import BlogContext from '../contexts/BlogContext';
-function IndexScreen() {
+import { View, Text, StyleSheet, Button, FlatList, TouchableOpacity, SafeAreaView } from 'react-native';
+import { Context } from '../contexts/BlogContext'
+import { withNavigation } from 'react-navigation'
 
-    const { data,addBlogPost } = useContext(BlogContext);
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
+function IndexScreen({ navigation }) {
+
+    const { state, addBlogPost, deleteBlogPost } = useContext(Context);
 
 
-    // const renderBlogPost = ({ item }) => {
-    //     return (
-    //         <View>
-    //             <Text> Title : {item.title} </Text>
-    //         </View>
-    //     )
-    // }
+    const renderBlogPost = ({ item }) => {
+        return (
+            <TouchableOpacity style={styles.blogPostContainer} onPress={() => navigation.navigate('Detail', { id: item.id })}>
+                <View>
+                    <Text> Title : {item.title} - {item.id} </Text>
+                    <Text> Content : {item.content}  </Text>
+                </View>
+                <TouchableOpacity style={styles.buttonContainer} onPress={() => deleteBlogPost(item.id)} >
+                    <Icon name='delete' size={20} />
+                </TouchableOpacity>
+            </TouchableOpacity>
+        )
+    }
+
 
     return (
-        <View>
-            <Button title="Hit Me" onPress={addBlogPost} />
-            <Text>Index Screen</Text>
-            <Text>{JSON.stringify(data)}</Text>
-            {/* <FlatList
+        <SafeAreaView style={styles.container}>
+            {/* <Button title="Hit Me" onPress={addBlogPost} /> */}
+
+            <FlatList
                 data={state}
                 keyExtractor={(blogPost) => blogPost.title}
                 renderItem={renderBlogPost}
-            /> */}
+                nestedScrollEnabled
+            />
 
-        </View>
+        </SafeAreaView>
     )
 }
 
-const styles = StyleSheet.create({});
 
 
-export default IndexScreen;
+IndexScreen.navigationOptions = ({ navigation }) => ({
+    headerRight: () => (
+        <TouchableOpacity onPress={() => navigation.navigate('Create')} style={styles.createButtonContainer}>
+            <Icon name="plus" size={40} />
+        </TouchableOpacity>
+    ),
+})
+
+
+
+const styles = StyleSheet.create({
+
+    container: {
+        flex: 1,
+        backgroundColor: '#fefefe',
+    },
+
+    blogPostContainer: {
+        flexDirection: 'row',
+        height: 100,
+        marginHorizontal: 15,
+        borderWidth: 0.5,
+        borderRadius: 4,
+        marginVertical: 5,
+        justifyContent: 'space-between',
+        paddingHorizontal: 5,
+        paddingVertical: 5,
+    },
+    buttonContainer: {
+        justifyContent: 'flex-end',
+    },
+    createButtonContainer: {
+        margin: 5,
+    }
+
+});
+
+
+export default withNavigation(IndexScreen);
