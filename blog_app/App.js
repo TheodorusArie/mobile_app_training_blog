@@ -6,11 +6,13 @@ import { Provider } from './src/contexts/BlogContext';
 import IndexScreen from './src/screens/IndexScreen';
 import DetailScreen from './src/screens/DetailScreen';
 import CreateScreen from './src/screens/CreateScreen';
+import EditScreen from './src/screens/EditScreen';
 
 const navigator = createStackNavigator({
   Index: IndexScreen,
   Detail: DetailScreen,
   Create: CreateScreen,
+  Edit:EditScreen,
 }, {
   initialRouteName: 'Index',
   defaultNavigationOptions: {
