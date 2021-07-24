@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
 
 DetailScreen.navigationOptions = ({ navigation }) => ({
     headerRight: () => (
-        <TouchableOpacity onPress={() => navigation.navigate('Index')} style={styles.editButtonContainer}>
+        <TouchableOpacity onPress={() => navigation.navigate('Edit', { id: navigation.getParam('id') })} style={styles.editButtonContainer}>
             <Icon name="pencil" size={30} />
         </TouchableOpacity>
     )

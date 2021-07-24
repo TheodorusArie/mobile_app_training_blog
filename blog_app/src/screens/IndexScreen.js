@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { View, Text, StyleSheet, Button, FlatList, TouchableOpacity, SafeAreaView } from 'react-native';
 import { Context } from '../contexts/BlogContext'
 import { withNavigation } from 'react-navigation'
@@ -7,7 +7,19 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 function IndexScreen({ navigation }) {
 
-    const { state, addBlogPost, deleteBlogPost } = useContext(Context);
+    const { state, deleteBlogPost, getBlogPost } = useContext(Context);
+
+    useEffect(() => {
+        getBlogPost();
+
+        const listener = navigation.addListener('didFocus', () => {
+            getBlogPost();
+        })
+
+        return () => {
+            listener.remove();
+        };
+    }, [])
 
 
     const renderBlogPost = ({ item }) => {
@@ -31,7 +43,7 @@ function IndexScreen({ navigation }) {
 
             <FlatList
                 data={state}
-                keyExtractor={(blogPost) => blogPost.title}
+                keyExtractor={(blogPost) => String(blogPost.id)}
                 renderItem={renderBlogPost}
                 nestedScrollEnabled
             />
